@@ -1,20 +1,28 @@
 pipeline {
     agent any
-
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
+    }
     stages {
-        stage('Build') {
+        stage('Clone repository') {
             steps {
-                echo 'Building...'
+                git 'https://github.com/brandonj0521-beep/my-docker-pipeline.git'
             }
         }
-        stage('Test') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Testing...'
+                script {
+                    dockerImage = docker.build("brandonj090823/my-docker-pipeline")
+                }
             }
         }
-        stage('Deploy') {
+        stage('Push to Docker Hub') {
             steps {
-                echo 'Deploying...'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+                        dockerImage.push('latest')
+                    }
+                }
             }
         }
     }
