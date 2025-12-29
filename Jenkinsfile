@@ -1,17 +1,17 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    stage('Checkout SCM') {
-      steps {
-        checkout scm
-      }
-    }
+    stages {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
 
-    stage('Build Docker Image') {
-      steps {
-        sh 'docker build -t my-app:latest .'
-      }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t my-nginx-app .'
+            }
+        }
     }
-  }
 }
